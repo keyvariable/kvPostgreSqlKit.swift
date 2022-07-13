@@ -157,6 +157,7 @@ extension Float : PostgresValueConvertible {
 
 
 
+#if !os(iOS)
 // Missing extension for Float80.
 extension Float80 : PostgresValueConvertible {
 
@@ -165,3 +166,4 @@ extension Float80 : PostgresValueConvertible {
     public var postgresValue: PostgresValue { .init(String(describing: self)) }
 
 }
+#endif // !iOS
