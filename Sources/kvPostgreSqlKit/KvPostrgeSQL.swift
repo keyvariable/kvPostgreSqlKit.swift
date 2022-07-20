@@ -38,7 +38,7 @@ public class KvPostgreSQL {
     private let queue: OperationQueue = {
         let queue = OperationQueue()
 
-        queue.name = "DetDB Queue"
+        queue.name = "KvPostgreSQL Queue"
         queue.maxConcurrentOperationCount = 1
 
         return queue
@@ -143,19 +143,48 @@ extension KvPostgreSQL {
 
 extension KvPostgreSQL {
 
+    @available(iOS 13.0.0, macOS 10.15.0, *)
+    public func prepared(_ sql: String) async throws -> Statement {
+        try await addOperation {
+            .init(try self.connection.prepareStatement(text: sql), self)
+        }
+    }
+
+
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
+    public func prepared(_ sql: String) throws -> Statement {
+        try addOperation({
+            .init(try self.connection.prepareStatement(text: sql), self)
+        })
+    }
+
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
+    public func prepared(_ sql: String, with completion: @escaping (Result<Statement, Error>) -> Void) {
+        addOperation({
+            .init(try self.connection.prepareStatement(text: sql), self)
+        }, completion: completion)
+    }
+
+
+    // MARK: .Statement
+
     public class Statement {
 
         public typealias Value = PostgresValueConvertible
         public typealias RowIterator = PostgresClientKit.Cursor
 
-
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         public typealias Result = Swift.Result<RowIterator, Error>
+
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         public typealias Completion = (Result) -> Void
 
 
-
         public private(set) weak var db: KvPostgreSQL!
-
 
 
         public convenience init(_ sql: String, in db: KvPostgreSQL) throws {
@@ -167,49 +196,71 @@ extension KvPostgreSQL {
         }
 
 
-
         fileprivate init(_ underlying: PostgresClientKit.Statement, _ db: KvPostgreSQL) {
             self.underlying = underlying
             self.db = db
         }
 
 
-
         private let underlying: PostgresClientKit.Statement
 
 
+        // MARK: Operations
 
-        // MARK: Asynchronous Execution
+        @available(iOS 13.0.0, macOS 10.15.0, *)
+        @discardableResult
+        public func execute() async throws -> RowIterator {
+            try await db.addOperation {
+                try self.underlying.execute()
+            }
+        }
+
+        @available(iOS 13.0.0, macOS 10.15.0, *)
+        @discardableResult
+        public func execute(args: [Value?]) async throws -> RowIterator {
+            try await db.addOperation {
+                try self.underlying.execute(parameterValues: args)
+            }
+        }
+
+        /// Execute the receiver asynchronously substituting given arguments.
+        @available(iOS 13.0.0, macOS 10.15.0, *)
+        @discardableResult @inlinable
+        public func execute(_ args: Value?...) async throws -> RowIterator {
+            try await execute(args: args)
+        }
+
 
         /// Execute the receiver asynchronously.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         public func execute(with completion: @escaping Completion) {
             db.addOperation({
                 try self.underlying.execute()
             }, completion: completion)
         }
 
-
-
         /// Execute the receiver asynchronously substituting given arguments.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         public func execute(args: [Value?], with completion: @escaping Completion) {
             db.addOperation({
                 try self.underlying.execute(parameterValues: args)
             }, completion: completion)
         }
 
-
-
         /// Execute the receiver asynchronously substituting given arguments.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         @inlinable
         public func execute(_ args: Value?..., with completion: @escaping Completion) {
             execute(args: args, with: completion)
         }
 
 
-
-        // MARK: Synchronous Execution
-
         /// Execute the receiver synchronously.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         @discardableResult
         public func execute() throws -> RowIterator {
             try db.addOperation({
@@ -217,9 +268,9 @@ extension KvPostgreSQL {
             })
         }
 
-
-
         /// Execute the receiver synchronously substituting given arguments.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         @discardableResult
         public func execute(args: [Value?]) throws -> RowIterator {
             try db.addOperation({
@@ -227,30 +278,14 @@ extension KvPostgreSQL {
             })
         }
 
-
-
         /// Execute the receiver synchronously substituting given arguments.
+        @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+        @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
         @inlinable @discardableResult
         public func execute(_ args: Value?...) throws -> RowIterator {
             try execute(args: args)
         }
 
-    }
-
-
-
-    public func prepared(_ sql: String) throws -> Statement {
-        try addOperation({
-            .init(try self.connection.prepareStatement(text: sql), self)
-        })
-    }
-
-
-
-    public func prepared(_ sql: String, with completion: @escaping (Result<Statement, Error>) -> Void) {
-        addOperation({
-            .init(try self.connection.prepareStatement(text: sql), self)
-        }, completion: completion)
     }
 
 }
@@ -261,31 +296,34 @@ extension KvPostgreSQL {
 
 extension KvPostgreSQL {
 
-    private func addOperation<T>(_ body: @escaping () throws -> T, completion: @escaping (Result<T, Error>) -> Void) {
-        let main: () -> Void = { completion(.init(catching: body)) }
-
-        if queue == .current {
-            main()
-
-        } else {
-            queue.addOperation(main)
+    @available(iOS 13.0.0, macOS 10.15.0, *)
+    private func addOperation<T>(_ body: @escaping () throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            addOperation(body, completion: continuation.resume(with:))
         }
     }
 
 
+    private func addOperation<T>(_ body: @escaping () throws -> T, completion: @escaping (Result<T, Error>) -> Void) {
+        let block: () -> Void = { completion(.init(catching: body)) }
 
+        queue == .current ? block() : queue.addOperation(block)
+    }
+
+
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
     private func addOperation<T>(_ body: @escaping () throws -> T) throws -> T {
         var result: Result<T, Error>!
 
-        let main: () -> Void = {
+        let block: () -> Void = {
             result = .init(catching: body)
         }
 
         if queue == .current {
-            main()
-
+            block()
         } else {
-            queue.addOperations([ BlockOperation(block: main) ], waitUntilFinished: true)
+            queue.addOperations([ BlockOperation(block: block) ], waitUntilFinished: true)
         }
 
         return try result.get()

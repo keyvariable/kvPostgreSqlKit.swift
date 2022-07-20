@@ -25,41 +25,50 @@ import XCTest
 
 @testable import kvPostgreSqlKit
 
+import kvSqlKit
+
 
 
 final class KvPostgreSqlKitTests : XCTestCase {
 
     static var allTests = [
-        ("default", testApplication),
+        ("simpleExpression", testSimpleExpression),
+        ("version", testApplication),
     ]
 
 
+    private let dbConfiguraion = KvPostgreSQL.Configuration(credential: .init(user: NSUserName()))
 
-    func testApplication() {
-        do {
-            let db = try KvPostgreSQL(with: .init(credential: .init(user: NSUserName())))
 
-            let expectation = XCTestExpectation(description: "PostgreSQL version")
-            defer { wait(for: [expectation], timeout: 10.0) }
+    func testApplication() async throws {
+        let db = try KvPostgreSQL(with: dbConfiguraion)
 
-            let statement = try db.prepared("SELECT version()")
+        guard #available(iOS 13.0.0, macOS 10.15.0, *)
+        else { return XCTFail("Unexpected OS") }
 
-            statement.execute { (result) in
-                do {
-                    try IteratorSequence(result.get()).forEach { row in
-                        print(try row.get())
-                    }
+        let rows = try await db.prepared("SELECT version()").execute()
 
-                } catch {
-                    XCTFail(error.localizedDescription)
-                }
+        try rows.lazy
+            .map { try $0.get() }
+            .forEach { row in print(row) }
+    }
 
-                expectation.fulfill()
+
+    func testSimpleExpression() async throws {
+        let db = try KvPostgreSQL(with: dbConfiguraion)
+
+        let arg0 = 1, arg1 = 2.14
+        let rows = try await db.prepared(KvSQL.select(%1, %2)).execute(arg0, arg1)
+
+        try rows.lazy
+            .map { try $0.get() }
+            .forEach { row in
+                let answer0 = try row.columns[0].int()
+                XCTAssertEqual(answer0, arg0)
+
+                let answer1 = try row.columns[1].double()
+                XCTAssertEqual(answer1, arg1)
             }
-
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
     }
 
 }
