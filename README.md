@@ -21,7 +21,7 @@ The same as [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClient
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/keyvariable/kvPostgreSqlKit-Swift.git", from: "0.1.0"),
+    .package(url: "https://github.com/keyvariable/kvPostgreSqlKit-Swift.git", from: "0.2.0"),
 ]
 ```
 
