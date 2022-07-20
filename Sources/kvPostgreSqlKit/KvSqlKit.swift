@@ -43,13 +43,22 @@ extension KvPostgreSQL.Statement {
 
 extension KvPostgreSQL {
 
+    @available(iOS 13.0.0, macOS 10.15.0, *)
+    @inlinable
+    public func prepared(_ query: KvSqlQuery) async throws -> Statement {
+        try await prepared(query.sql)
+    }
+
+
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
     @inlinable
     public func prepared(_ query: KvSqlQuery) throws -> Statement {
         try prepared(query.sql)
     }
 
-
-
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
     @inlinable
     public func prepared(_ query: KvSqlQuery, with completion: @escaping (Result<Statement, Error>) -> Void) {
         prepared(query.sql, with: completion)
@@ -63,13 +72,22 @@ extension KvPostgreSQL {
 
 extension KvSqlQuery {
 
+    @available(iOS 13.0.0, macOS 10.15.0, *)
+    @inlinable
+    public func prepare(in postgreSQL: KvPostgreSQL) async throws -> KvPostgreSQL.Statement {
+        try await postgreSQL.prepared(self)
+    }
+
+
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
     @inlinable
     public func prepare(in postgreSQL: KvPostgreSQL) throws -> KvPostgreSQL.Statement {
         try postgreSQL.prepared(self)
     }
 
-
-
+    @available(iOS, deprecated: 13.0.0, message: "Use version with async keyword")
+    @available(macOS, deprecated: 10.15.0, message: "Use version with async keyword")
     @inlinable
     public func prepared(in postgreSQL: KvPostgreSQL, with completion: @escaping (Result<KvPostgreSQL.Statement, Error>) -> Void) {
         postgreSQL.prepared(self, with: completion)
