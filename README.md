@@ -1,4 +1,4 @@
-# kvPostgreSqlKit-Swift
+# kvPostgreSqlKit.swift
 
 ![Swift 5.2](https://img.shields.io/badge/swift-5.2-green.svg)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg)
@@ -21,7 +21,7 @@ The same as [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClient
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/keyvariable/kvPostgreSqlKit-Swift.git", from: "0.2.0"),
+    .package(url: "https://github.com/keyvariable/kvPostgreSqlKit.swift.git", from: "0.3.0"),
 ]
 ```
 
@@ -29,7 +29,7 @@ dependencies: [
 
 ```swift
 dependencies: [
-    .product(name: "kvPostgreSqlKit", package: "kvPostgreSqlKit-Swift"),
+    .product(name: "kvPostgreSqlKit", package: "kvPostgreSqlKit.swift"),
 ]
 ```
 

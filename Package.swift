@@ -19,22 +19,25 @@
 
 import PackageDescription
 
+
+let targets: [Target] = [
+    .target(name: "kvPostgreSqlKit",
+            dependencies: [
+                .product(name: "kvSqlKit", package: "kvSqlKit.swift"),
+                "PostgresClientKit"
+            ]),
+    .testTarget(name: "kvPostgreSqlKitTests", dependencies: [ "kvPostgreSqlKit" ]),
+]
+
 let package = Package(
-    name: "kvPostgreSqlKit-Swift",
+    name: "kvPostgreSqlKit.swift",
     platforms: [ .iOS(.v11), ],
     products: [
         .library(name: "kvPostgreSqlKit", targets: [ "kvPostgreSqlKit" ]),
     ],
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit.git", from: "1.4.3"),
-        .package(url: "https://github.com/keyvariable/kvSqlKit-Swift.git", from: "0.1.1"),
+        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.2.0"),
     ],
-    targets: [
-        .target(name: "kvPostgreSqlKit",
-                dependencies: [
-                    .product(name: "kvSqlKit", package: "kvSqlKit-Swift"),
-                    "PostgresClientKit"
-                ]),
-        .testTarget(name: "kvPostgreSqlKitTests", dependencies: [ "kvPostgreSqlKit" ]),
-    ]
+    targets: targets
 )

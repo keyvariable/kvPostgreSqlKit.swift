@@ -3,56 +3,47 @@
     "pins": [
       {
         "package": "Socket",
-        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
+        "repositoryURL": "https://github.com/Kitura/BlueSocket.git",
         "state": {
           "branch": null,
-          "revision": "dd924c3bc2c1c144c42b8dda3896f1a03115ded4",
-          "version": "2.0.2"
+          "revision": "7b23a867008e0027bfd6f4d398d44720707bc8ca",
+          "version": "2.0.4"
         }
       },
       {
         "package": "SSLService",
-        "repositoryURL": "https://github.com/IBM-Swift/BlueSSLService",
+        "repositoryURL": "https://github.com/Kitura/BlueSSLService",
         "state": {
           "branch": null,
-          "revision": "c249988fb748749739144e7f554710552acdc0bd",
-          "version": "2.0.1"
+          "revision": "b27a94d063962dfa1bba9f79814c4ef202cf33a4",
+          "version": "2.0.2"
         }
       },
       {
-        "package": "kvKit-Swift",
-        "repositoryURL": "https://github.com/keyvariable/kvKit-Swift.git",
+        "package": "kvKit.swift",
+        "repositoryURL": "https://github.com/keyvariable/kvKit.swift.git",
         "state": {
           "branch": null,
-          "revision": "b451453e89f2497df61e261c3709b03ae8f3db7c",
-          "version": "3.0.0"
+          "revision": "d8095d6f9ce8c96d66d857cf836ed3190e7c3533",
+          "version": "4.0.0"
         }
       },
       {
-        "package": "kvSqlKit-Swift",
-        "repositoryURL": "https://github.com/keyvariable/kvSqlKit-Swift.git",
+        "package": "kvSqlKit.swift",
+        "repositoryURL": "https://github.com/keyvariable/kvSqlKit.swift.git",
         "state": {
           "branch": null,
-          "revision": "aa641940c5543c2744d8df465d9fb5d1265a9b1a",
-          "version": "0.1.1"
+          "revision": "e6d0c37c00afa17d91bb6cbee9c0f8fbff843fff",
+          "version": "0.2.0"
         }
       },
       {
         "package": "PostgresClientKit",
-        "repositoryURL": "https://github.com/codewinsdotcom/PostgresClientKit",
+        "repositoryURL": "https://github.com/codewinsdotcom/PostgresClientKit.git",
         "state": {
           "branch": null,
-          "revision": "beafedaea6dc9f04712e9a8547b77f47c406a47e",
-          "version": "1.4.3"
-        }
-      },
-      {
-        "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/apple/swift-argument-parser",
-        "state": {
-          "branch": null,
-          "revision": "6b2aa2748a7881eebb9f84fb10c01293e15b52ca",
-          "version": "0.5.0"
+          "revision": "356ffe0c43722f192d796300557b3b530a0baebc",
+          "version": "1.5.0"
         }
       }
     ]
