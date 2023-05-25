@@ -30,7 +30,7 @@ let targets: [Target] = [
 ]
 
 let package = Package(
-    name: "kvPostgreSqlKit-Swift",
+    name: "kvPostgreSqlKit.swift",
     platforms: [ .iOS(.v11), ],
     products: [
         .library(name: "kvPostgreSqlKit", targets: [ "kvPostgreSqlKit" ]),
