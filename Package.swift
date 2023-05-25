@@ -23,7 +23,7 @@ import PackageDescription
 let targets: [Target] = [
     .target(name: "kvPostgreSqlKit",
             dependencies: [
-                .product(name: "kvSqlKit", package: "kvSqlKit-Swift"),
+                .product(name: "kvSqlKit", package: "kvSqlKit.swift"),
                 "PostgresClientKit"
             ]),
     .testTarget(name: "kvPostgreSqlKitTests", dependencies: [ "kvPostgreSqlKit" ]),
@@ -37,7 +37,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit.git", from: "1.4.3"),
-        .package(url: "https://github.com/keyvariable/kvSqlKit-Swift.git", from: "0.1.1"),
+        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.2.0"),
     ],
     targets: targets
 )
