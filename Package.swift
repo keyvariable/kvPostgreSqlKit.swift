@@ -2,7 +2,7 @@
 //
 //===----------------------------------------------------------------------===//
 //
-//  Copyright (c) 2021 Svyatoslav Popov.
+//  Copyright (c) 2021 Svyatoslav Popov (info@keyvar.com).
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 //  the License. You may obtain a copy of the License at
@@ -20,24 +20,29 @@
 import PackageDescription
 
 
-let targets: [Target] = [
-    .target(name: "kvPostgreSqlKit",
-            dependencies: [
-                .product(name: "kvSqlKit", package: "kvSqlKit.swift"),
-                "PostgresClientKit"
-            ]),
-    .testTarget(name: "kvPostgreSqlKitTests", dependencies: [ "kvPostgreSqlKit" ]),
-]
+let swiftSettings: [SwiftSetting]? = nil
+
 
 let package = Package(
     name: "kvPostgreSqlKit.swift",
+
     platforms: [ .iOS(.v11), ],
+
     products: [
         .library(name: "kvPostgreSqlKit", targets: [ "kvPostgreSqlKit" ]),
     ],
+
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit.git", from: "1.4.3"),
-        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.2.0"),
+        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.3.0"),
     ],
-    targets: targets
+
+    targets: [
+        .target(name: "kvPostgreSqlKit",
+                dependencies: [
+                    .product(name: "kvSqlKit", package: "kvSqlKit.swift"),
+                    "PostgresClientKit"
+                ]),
+        .testTarget(name: "kvPostgreSqlKitTests", dependencies: [ "kvPostgreSqlKit" ]),
+    ]
 )

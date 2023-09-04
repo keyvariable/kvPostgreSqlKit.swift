@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-//  Copyright (c) 2021 Svyatoslav Popov.
+//  Copyright (c) 2021 Svyatoslav Popov (info@keyvar.com).
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 //  the License. You may obtain a copy of the License at
@@ -16,7 +16,7 @@
 //===----------------------------------------------------------------------===//
 //
 //  KvPostgreSqlKitTests.swift
-//  kvPostgreSqlKit
+//  kvPostgreSqlKitTests
 //
 //  Created by Svyatoslav Popov on 17.04.2020.
 //
@@ -31,14 +31,7 @@ import kvSqlKit
 
 final class KvPostgreSqlKitTests : XCTestCase {
 
-    static var allTests = [
-        ("simpleExpression", testSimpleExpression),
-        ("version", testApplication),
-    ]
-
-
-    private let dbConfiguraion = KvPostgreSQL.Configuration(credential: .init(user: NSUserName()))
-
+    // MARK: - testApplication()
 
     func testApplication() async throws {
         let db = try KvPostgreSQL(with: dbConfiguraion)
@@ -53,6 +46,9 @@ final class KvPostgreSqlKitTests : XCTestCase {
             .forEach { row in print(row) }
     }
 
+
+
+    // MARK: - testSimpleExpression()
 
     func testSimpleExpression() async throws {
         let db = try KvPostgreSQL(with: dbConfiguraion)
@@ -70,5 +66,11 @@ final class KvPostgreSqlKitTests : XCTestCase {
                 XCTAssertEqual(answer1, arg1)
             }
     }
+
+
+
+    // MARK: - Auxiliaries
+
+    private let dbConfiguraion = KvPostgreSQL.Configuration(credential: .init(user: NSUserName()))
 
 }
