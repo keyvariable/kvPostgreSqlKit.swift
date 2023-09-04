@@ -34,7 +34,7 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit.git", from: "1.4.3"),
-        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.2.0"),
+        .package(url: "https://github.com/keyvariable/kvSqlKit.swift.git", from: "0.3.0"),
     ],
 
     targets: [

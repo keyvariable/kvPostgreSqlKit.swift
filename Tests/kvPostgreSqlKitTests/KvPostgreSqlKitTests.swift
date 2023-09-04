@@ -31,14 +31,7 @@ import kvSqlKit
 
 final class KvPostgreSqlKitTests : XCTestCase {
 
-    static var allTests = [
-        ("simpleExpression", testSimpleExpression),
-        ("version", testApplication),
-    ]
-
-
-    private let dbConfiguraion = KvPostgreSQL.Configuration(credential: .init(user: NSUserName()))
-
+    // MARK: - testApplication()
 
     func testApplication() async throws {
         let db = try KvPostgreSQL(with: dbConfiguraion)
@@ -53,6 +46,9 @@ final class KvPostgreSqlKitTests : XCTestCase {
             .forEach { row in print(row) }
     }
 
+
+
+    // MARK: - testSimpleExpression()
 
     func testSimpleExpression() async throws {
         let db = try KvPostgreSQL(with: dbConfiguraion)
@@ -70,5 +66,11 @@ final class KvPostgreSqlKitTests : XCTestCase {
                 XCTAssertEqual(answer1, arg1)
             }
     }
+
+
+
+    // MARK: - Auxiliaries
+
+    private let dbConfiguraion = KvPostgreSQL.Configuration(credential: .init(user: NSUserName()))
 
 }
