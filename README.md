@@ -6,6 +6,7 @@ A lightweight wrapper for [PostgresClientKit](https://github.com/codewinsdotcom/
 ## Supported Platforms
 
 The same as [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit).
+Package is built and the unit-tests are passed on macOS and Linux (Ubuntu 22.04).
 
 
 ## Getting Started
